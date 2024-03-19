@@ -1,0 +1,14 @@
+<% include ./partials/header.ejs %>
+<div class="nav h-14 w-full bg-zinc-600 flex items-center justify-between px-4 py-3">
+    <a href="/profile" class="text-blue-500 text-lg">Profile</a>
+    <h2 class="text-xl text-white "><%= user.username %></h2>
+</div>
+<div class="chats-Area bg-black h-screen w-full px-2 py-2">
+    <% user.followings.forEach(function(otherUser){ %>
+        <div class="user mt-1 h-16 px-3 py-2 border-b flex items-center justify-start">
+            <img class="h-12 w-12 object-cover object-center rounded-full" src="/images/uploads/<%= otherUser.picture %>" alt="">
+            <h2 class="text-white ml-7"><%= otherUser.username %></h2>
+        </div>
+    <% }) %>
+</div>
+<% include ./partials/footer.ejs %>

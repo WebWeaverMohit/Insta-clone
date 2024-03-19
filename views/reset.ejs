@@ -1,0 +1,39 @@
+<% include ./partials/header.ejs %>
+<div class="flex items-center justify-center h-screen w-full bg-black px-4">
+    <div class="bg-white p-8 rounded shadow-md max-w-md w-full">
+
+        <h1 class="text-2xl font-semibold mb-6 text-center">Reset Your Password</h1>
+    
+        <form action="/reset-password" method="post" class="space-y-4">
+    
+            <!-- Old Password -->
+            <div>
+                <label for="oldPassword" class="block text-gray-700">Old Password</label>
+                <input type="password" id="oldPassword" name="oldPassword" class="w-full border border-gray-300 p-2 rounded mt-1">
+            </div>
+    
+            <!-- New Password -->
+            <div>
+                <label for="newPassword" class="block text-gray-700">New Password</label>
+                <input type="password" id="newPassword" name="newPassword" class="w-full border border-gray-300 p-2 rounded mt-1">
+            </div>
+    
+            <!-- Confirm New Password -->
+            <div>
+                <label for="confirmNewPassword" class="block text-gray-700">Confirm New Password</label>
+                <input type="password" id="confirmNewPassword" name="confirmNewPassword" class="w-full border border-gray-300 p-2 rounded mt-1">
+            </div>
+    
+    
+            <!-- Submit Button -->
+            <div>
+                <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-300">Reset Password</button>
+            </div>
+    
+        </form>
+    
+    </div>
+</div>
+
+
+<% include ./partials/footer.ejs %>
