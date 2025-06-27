@@ -1,20 +1,30 @@
 <% include ./partials/header.ejs %>
-    <div class="main h-screen w-full bg-zinc-800">
-        <div class="h-14 w-full flex items-center justify-start px-4 y-2 bg-zinc-600">
-            <a class="text-blue-500 font-semibold" href="/profile">Profile</a>
+
+<div class="main min-h-screen w-full bg-[#0F0F0F] font-orbitron">
+  <div class="h-14 w-full flex items-center justify-start px-4 py-2 bg-[#1A1A1A]">
+    <a class="text-[#7F5AF0] text-sm hover:underline transition" href="/profile">Profile</a>
+  </div>
+
+  <div class="flex flex-wrap gap-6 text-white w-full px-6 py-6">
+    <% if(savedPosts.length === 0){ %>
+      <h3 class="w-full text-center text-gray-400 text-sm mt-10">No saved posts found.</h3>
+    <% } else { %>
+      <% savedPosts.forEach(function(post){ %>
+        <div class="overflow-hidden rounded-lg border border-[#292929] p-2 hover:bg-[#1A1A1A] transition">
+          <img class="h-32 w-32 rounded-md object-cover object-center border border-[#3d3d3d]" src="/images/uploads/<%= post.picture %>" alt="">
+          <h4 class="mt-2 text-sm text-[#CCCCCC] text-center"><%= post.user.username %></h4>
         </div>
-        <div class="h-32 flex flex-wrap gap-7 text-white w-full px-8 py-4">
-            <% if(savedPosts.length === 0){ %>
-                <h3 class="flex justify-center text-center mt-10">No saved posts found.</h3>
-            <% }else{ %>
-                <% savedPosts.forEach(function(post){ %>
-                    <div class=" overflow-hidden rounded-lg">
-                        <img class="h-32 w-32 rounded-lg object-center object-cover" src="/images/uploads/<%= post.picture %>" alt="">
-                        <h4 class=" mt-1 ml-2 text-white"><%= post.user.username %></h4>
-                    </div>
-                <% }) %>
-            <% } %>
-        </div>
-    </div>
-      
+      <% }) %>
+    <% } %>
+  </div>
+</div>
+
 <% include ./partials/footer.ejs %>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  .font-dm {
+    font-family: 'DM Sans', sans-serif;
+  }
+</style>
+

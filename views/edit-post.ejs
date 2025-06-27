@@ -1,14 +1,72 @@
 <% include ./partials/header.ejs %>
-<div class="w-full h-12 bg-black flex items-center justify-start px-4">
-    <a class="text-blue-400" href="/profile">Profile</a>
+
+<div class="w-full h-12 bg-[#0F0F0F] flex items-center justify-start px-4">
+  <a class="text-[#7F5AF0] hover:underline transition" href="/profile"
+    >Profile</a
+  >
 </div>
-<div class="h-screen w-full bg-zinc-600 flex flex-col items-center justify-center">
-    <form class="flex flex-col items-center justify-center" action="/editcaption/<%= post.id %>" method="post">
-        <div class="h-56 w-56 bg-black mb-5 overflow-hidden">
-            <img class="h-full w-full rounded-md object-center object-cover" src="/images/uploads/<%= post.picture %>" alt="">
-        </div>
-        <input class="w-56 h-18 rounded-lg outline-none whitespace-pre-line mb-7 overflow-hidden bg-white px-4 py-2 text-black mt-10 text-sm" type="text" name="caption" value="<%= post.caption %>" placeholder="Enter-Caption">
-        <input class="px-2 py-1 bg-blue-500 rounded-lg text-white text-medium" type="submit" value="Change">
-    </form>
+
+<div
+  class="min-h-screen w-full bg-[#0F0F0F] flex flex-col items-center justify-center text-white font-orbitron"
+>
+  <form
+    class="flex flex-col items-center justify-center animate-fade-in"
+    action="/editcaption/<%= post.id %>"
+    method="post"
+  >
+    <div
+      class="h-56 w-56 bg-[#1A1A1A] mb-5 overflow-hidden rounded-md shadow-md"
+    >
+      <img
+        class="h-full w-full object-center object-cover"
+        src="/images/uploads/<%= post.picture %>"
+        alt=""
+      />
+    </div>
+
+    <input
+      class="w-64 rounded-md outline-none bg-[#1A1A1A] text-white px-4 py-2 text-sm border border-[#292929] focus:border-[#7F5AF0] placeholder:text-gray-400 transition"
+      type="text"
+      name="caption"
+      value="<%= post.caption %>"
+      placeholder="Enter Caption"
+    />
+
+    <input
+      class="mt-6 px-4 py-2 bg-[#7F5AF0] hover:bg-[#6d48e7] text-white rounded-md text-sm transition cursor-pointer"
+      type="submit"
+      value="Change"
+    />
+  </form>
 </div>
+
 <% include ./partials/footer.ejs %>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
+  rel="stylesheet"
+/>
+
+  
+
+
+<style>
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 1s ease-out forwards;
+  }
+
+  .font-dm {
+    font-family: "DM Sans", sans-serif;
+  }
+</style>

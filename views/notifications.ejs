@@ -1,37 +1,47 @@
 <% include ./partials/header.ejs %>
-<div class="main h-screen w-full px-2 py-2 bg-black">
-    <div class="nav relative flex items-center justify-between px-4 rounded-lg h-14 w-full bg-zinc-600">
-        <i class="ri-arrow-left-s-line text-4xl text-blue-500"></i>
-        <h3 class="text-white text-lg">Notifications</h3>
-    </div>
-    <div class="notificationsArea">
-        <% notifications.forEach(notification => { %>
-          <li class="flex items-center py-2 px-4 border-b border-gray-300 transition duration-300 ease-in-out hover:bg-gray-100 
-                      <%= notification.isRead ? 'text-gray-500' : 'text-black' %>">
-            <div class="flex-shrink-0 mr-3">
-              <span class="text-xl">
-                <!-- Add an appropriate icon based on notification type -->
-                <% if (notification.type === 'follow') { %>
-                  &#128100; <!-- 🎉 -->
-                <% } else if (notification.type === 'like') { %>
-                  &#x2764; <!-- ❤️ -->
-                <% } else if (notification.type === 'comment') { %>
-                  💬
-                <% } %>
-              </span>
-            </div>
-            <div>
-              <% if (notification.type === 'follow') { %>
-                <%= notification.userId %> started following you.
-              <% } else if (notification.type === 'like') { %>
-                <%= notification.userId %> liked your post.
-              <% } else if (notification.type === 'comment') { %>
-                <%= notification.userId %> commented on your post.
-              <% } %>
-            </div>
-          </li>
-        <% }); %>
-      </div>
-      
+
+<div class="main min-h-screen w-full px-2 py-2 bg-[#0F0F0F] font-orbitron">
+  <div class="nav relative flex items-center justify-between px-4 rounded-lg h-14 w-full bg-[#1A1A1A]">
+    <a href="/feed">
+      <i class="ri-arrow-left-s-line text-2xl text-[#7F5AF0] cursor-pointer"></i>
+    </a>
+    <h3 class="text-white text-lg font-semibold">Notifications</h3>
+    <span></span>
+  </div>
+
+  <div class="notificationsArea mt-4">
+    <% notifications.forEach(notification => { %>
+      <li class="flex items-center py-3 px-4 border-b border-[#292929] transition duration-300 ease-in-out hover:bg-[#1A1A1A]
+        <%= notification.isRead ? 'text-gray-500' : 'text-white' %>">
+        <div class="flex-shrink-0 mr-4 text-xl">
+          <% if (notification.type === 'follow') { %>
+            🧑
+          <% } else if (notification.type === 'like') { %>
+            ❤️
+          <% } else if (notification.type === 'comment') { %>
+            💬
+          <% } %>
+        </div>
+        <div class="text-sm">
+          <% if (notification.type === 'follow') { %>
+            <strong class="text-[#7F5AF0]"><%= notification.userId %></strong> started following you.
+          <% } else if (notification.type === 'like') { %>
+            <strong class="text-[#7F5AF0]"><%= notification.userId %></strong> liked your post.
+          <% } else if (notification.type === 'comment') { %>
+            <strong class="text-[#7F5AF0]"><%= notification.userId %></strong> commented on your post.
+          <% } %>
+        </div>
+      </li>
+    <% }); %>
+  </div>
 </div>
+
 <% include ./partials/footer.ejs %>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  .font-dm {
+    font-family: 'DM Sans', sans-serif;
+  }
+</style>
+

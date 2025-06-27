@@ -1,37 +1,68 @@
 <% include ./partials/header.ejs %>
-  <div class="w-full min-h-screen bg-zinc-900 text-white py-5">
-    <div class="flex justify-between items-center px-4">
-      <a class="text-sm text-blue-500" href="/profile"><i class="ri-arrow-left-s-line"></i> profile</a>
-      <h2 class="leading-none text-sm">Edit Profile</h2>
-      <a class="text-sm" href="/feed"><i class="ri-home-line"></i> home</a>
-    </div>
-    <div class="flex flex-col items-center gap-2 mt-20">
-      <div class="image w-20 h-20 bg-sky-100 rounded-full overflow-hidden">
-        <img class="h-full w-full object-cover object-center" src="/images/uploads/<%= user.picture %>" alt="">
-      </div>
-      <button id="editbtn" class="text-blue-500 capitalize">edit picture</button>
-    </div>
-    <div class="gap-5 px-4 mt-10">
-      <h3 class="text-lg leading-none">Edit Account Details</h3>
-      <hr class="opacity-30 my-3">
-      <form id="form" action="/upload" method="post" enctype="multipart/form-data" >
-        <input id="edit" hidden type="file" name="image">
-      </form>
-      <form class="w-full" action="/update" method="post">
-        <input class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900" type="text" placeholder="username" name="username" value="<%= user.username %>">
-        <input class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900" type="text" placeholder="name" name="name" value="<%= user.name %>">
-        <textarea class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900 resize-none" placeholder="Bio" name="bio"><%= user.bio %></textarea>
-        <input class="w-full bg-blue-500 px-3 py-3 rounded-md mt-2" type="submit" value="Update Details">
-      </form>
-    </div>
-  </div>
-  <script>
-    document.querySelector("#editbtn").addEventListener("click", function(){
-      document.querySelector("#edit").click();
-    })
 
-    document.querySelector("#edit").addEventListener("change", function(){
-      document.querySelector("#form").submit()
-    })
-  </script>
+<div class="w-full min-h-screen bg-[#0F0F0F] text-white py-5 font-orbitron">
+  <div class="flex justify-between items-center px-4">
+    <a class="text-sm text-[#7F5AF0] hover:underline transition" href="/profile"><i class="ri-arrow-left-s-line"></i> profile</a>
+    <h2 class="leading-none text-sm">Edit Profile</h2>
+    <a class="text-sm text-[#7F5AF0] hover:underline transition" href="/feed"><i class="ri-home-line"></i> home</a>
+  </div>
+
+  <div class="flex flex-col items-center gap-2 mt-20 animate-fade-in">
+    <div class="image w-20 h-20 bg-[#1A1A1A] rounded-full overflow-hidden border-2 border-[#7F5AF0] shadow-md">
+      <img class="h-full w-full object-cover object-center" src="/images/uploads/<%= user.picture %>" alt="">
+    </div>
+    <button id="editbtn" class="text-[#7F5AF0] capitalize hover:underline transition">edit picture</button>
+  </div>
+
+  <div class="gap-5 px-4 mt-10">
+    <h3 class="text-lg leading-none font-semibold">Edit Account Details</h3>
+    <hr class="opacity-20 my-3 border-[#7F5AF0]">
+
+    <form id="form" action="/upload" method="post" enctype="multipart/form-data">
+      <input id="edit" hidden type="file" name="image">
+    </form>
+
+    <form class="w-full animate-fade-in-slow" action="/update" method="post">
+      <input class="px-3 mt-2 py-2 border border-[#292929] rounded-md block w-full bg-[#1A1A1A] focus:outline-none focus:border-[#7F5AF0] transition" type="text" placeholder="username" name="username" value="<%= user.username %>">
+      <input class="px-3 mt-3 py-2 border border-[#292929] rounded-md block w-full bg-[#1A1A1A] focus:outline-none focus:border-[#7F5AF0] transition" type="text" placeholder="name" name="name" value="<%= user.name %>">
+      <textarea class="px-3 mt-3 py-2 border border-[#292929] rounded-md block w-full bg-[#1A1A1A] resize-none text-white focus:outline-none focus:border-[#7F5AF0] transition placeholder:text-gray-400" placeholder="Bio" name="bio"><%= user.bio %></textarea>
+      <input class="w-full bg-[#7F5AF0] hover:bg-[#6d48e7] text-white px-3 py-3 rounded-md mt-4 transition cursor-pointer" type="submit" value="Update Details">
+    </form>
+  </div>
+</div>
+
+<script>
+  document.querySelector("#editbtn").addEventListener("click", function() {
+    document.querySelector("#edit").click();
+  });
+
+  document.querySelector("#edit").addEventListener("change", function() {
+    document.querySelector("#form").submit();
+  });
+</script>
+
 <% include ./partials/footer.ejs %>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+  
+
+
+<style>
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 1s ease-out forwards;
+  }
+
+  .animate-fade-in-slow {
+    animation: fade-in 1.5s ease-out forwards;
+  }
+
+  .font-dm {
+    font-family: 'DM Sans', sans-serif;
+  }
+</style>

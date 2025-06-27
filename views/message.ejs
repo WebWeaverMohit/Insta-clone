@@ -1,14 +1,25 @@
 <% include ./partials/header.ejs %>
-<div class="nav h-14 w-full bg-zinc-600 flex items-center justify-between px-4 py-3">
-    <a href="/profile" class="text-blue-500 text-lg">Profile</a>
-    <h2 class="text-xl text-white "><%= user.username %></h2>
+
+<div class="nav h-14 w-full bg-[#1A1A1A] flex items-center justify-between px-4 py-3 font-orbitron">
+  <a href="/profile" class="text-[#7F5AF0] text-sm hover:underline transition">Profile</a>
+  <h2 class="text-lg text-white font-semibold"><%= user.username %></h2>
 </div>
-<div class="chats-Area bg-black h-screen w-full px-2 py-2">
-    <% user.followings.forEach(function(otherUser){ %>
-        <div class="user mt-1 h-16 px-3 py-2 border-b flex items-center justify-start">
-            <img class="h-12 w-12 object-cover object-center rounded-full" src="/images/uploads/<%= otherUser.picture %>" alt="">
-            <h2 class="text-white ml-7"><%= otherUser.username %></h2>
-        </div>
-    <% }) %>
+
+<div class="chats-Area bg-[#0F0F0F] min-h-screen w-full px-2 py-2 font-orbitron">
+  <% user.followings.forEach(function(otherUser){ %>
+    <div class="user mt-1 h-16 px-3 py-2 border-b border-[#292929] flex items-center hover:bg-[#1A1A1A] transition">
+      <img class="h-12 w-12 object-cover object-center rounded-full border border-[#7F5AF0]" src="/images/uploads/<%= otherUser.picture %>" alt="">
+      <h2 class="text-white ml-5 text-sm tracking-wide"><%= otherUser.username %></h2>
+    </div>
+  <% }) %>
 </div>
+
 <% include ./partials/footer.ejs %>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  .font-dm {
+    font-family: 'DM Sans', sans-serif;
+  }
+</style>
+
