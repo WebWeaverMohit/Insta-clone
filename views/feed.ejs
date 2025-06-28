@@ -1,5 +1,5 @@
 <% include ./partials/header.ejs %>
-<div class="w-full min-h-screen bg-[#0F0F0F] text-white py-5 font-orbitron">
+<div class="w-full min-h-screen bg-[#0F0F0F] text-white py-5 font-dm">
   <div class="w-full px-4 flex items-center justify-between">
     <h1 class="text-2xl text-[#7F5AF0] font-bold">SOCIAL SPHERE</h1>
     <div class="icons flex gap-5 items-center">
@@ -17,8 +17,8 @@
           <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
             <img
               class="w-full h-full object-cover"
-              src="/images/uploads/<%= user.picture %>"
-              alt=""
+              src="<%= user.picture.startsWith('http') ? user.picture : '/images/uploads/' + user.picture %>"
+              alt="profile"
             />
           </div>
         </div>
@@ -26,7 +26,7 @@
       </div>
     </a>
 
-    <% stories.forEach(function(story){ %> <% if
+    <% stories.forEach(function(story){ if
     (user.followings.includes(story.user._id)) { %>
     <a href="/otheruser/story/<%= story.id %>">
       <div class="circle flex-shrink-0">
@@ -44,7 +44,7 @@
         <h3 class="text-center mt-1 text-sm"><%= story.user.username %></h3>
       </div>
     </a>
-    <% } %> <% }) %>
+    <% } }); %>
   </div>
 
   <div class="posts parent mb-20">
@@ -54,19 +54,21 @@
         <div class="w-[8vw] h-[8vw] bg-[#1A1A1A] rounded-full overflow-hidden">
           <img
             class="h-full w-full object-cover"
-            src="/images/uploads/<%= post.user.picture %>"
-            alt=""
+            src="<%= post.user.picture.startsWith('http') ? post.user.picture : '/images/uploads/' + post.user.picture %>"
+            alt="profile"
           />
         </div>
         <h4 class="text-sm"><%= post.user.username %></h4>
         <h6 class="text-xs opacity-30"><%= dater(new Date(post.date)) %></h6>
       </div>
 
+      <% const imageSrc = post.picture.startsWith('http') ? post.picture :
+      '/images/uploads/' + post.picture; %>
       <div class="relative w-full h-96 mt-4 bg-[#1A1A1A]">
         <img
           data-postid="<%= post.id %>"
           class="postimg h-full w-full object-cover"
-          src="/images/uploads/<%= post.picture %>"
+          src="<%= imageSrc %>"
           alt=""
         />
       </div>
@@ -98,38 +100,33 @@
         post.caption %>
       </h2>
 
-      <div class="w-full px-4 py-2 mb-2">
-        <% post.comments.forEach(comment=> { %>
-        <div class="cmtdv mb-2">
+      <div class="w-full py-2">
+        <% post.comments.forEach(comment => { %>
+        <div class="cmtdv_<%= post._id %> mb-2">
           <p class="text-sm">
             <strong><%= comment.username %></strong> <%= comment.text %>
           </p>
         </div>
-        <% }); %>
+        <% }) %>
       </div>
 
       <div class="commentContainer">
-        <div id="commentdiv_<%=post._id%>" class="hidden">
+        <div id="commentdiv_<%= post._id %>" class="hidden">
           <form
-            id="commentForm"
-            onsubmit="submitCommentHandler(event, '<%= post._id %>')"
-            class="flex h-14 items-center justify-between pl-2"
-            action="/posts/<%= post._id %>/comments"
-            method="post"
+            class="commentForm"
+            data-postid="<%= post._id %>"
+            onsubmit="submitCommentHandler(event, this)"
+            method="POST"
           >
-            <div class="mb-4 overflow-hidden">
+            <div class="flex items-center gap-2 w-full">
               <textarea
-                id="textarea"
-                class="w-64 rounded-lg px-4 py-2 h-12 mt-5 bg-[#292929] text-white"
+                class="textarea flex-1 bg-[#292929] text-white rounded-md px-4 py-2 h-12 resize-none outline-none focus:ring-2 focus:ring-[#7F5AF0]"
                 name="text"
-                placeholder="Add a comment"
+                placeholder="Add a comment..."
               ></textarea>
-            </div>
-            <div>
               <button
-                id="submitComment"
                 type="submit"
-                class="bg-[#7F5AF0] hover:bg-[#6d48e7] text-white px-4 py-2 rounded-lg transition"
+                class="h-12 px-5 bg-[#7F5AF0] hover:bg-[#6d48e7] text-white rounded-md transition duration-200"
               >
                 Submit
               </button>
@@ -138,164 +135,105 @@
         </div>
       </div>
     </div>
-
     <% }) %>
   </div>
 </div>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link
+  href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
+  rel="stylesheet"
+/>
 <style>
   .font-dm {
-    font-family: 'DM Sans', sans-serif;
+    font-family: "DM Sans", sans-serif;
   }
 </style>
 
-
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
-  integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-></script>
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js"
-  integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js"></script>
 <script>
-  var hehe = 0;
-  var commentIcon = document.querySelectorAll(".commentIcon");
-  var commentFormDivs = document.querySelectorAll("#commentdiv");
-  let pid;
-
-  document.querySelectorAll(".commentIcon").forEach(function (icon) {
-    icon.addEventListener("click", function () {
-      const targetId = icon.getAttribute("hey");
+  document.querySelectorAll(".commentIcon").forEach((icon) => {
+    icon.addEventListener("click", () => {
       const postId = icon.getAttribute("data-id");
-      pid = postId;
       const commentDiv = document.querySelector(`#commentdiv_${postId}`);
-
-      if (hehe === 0) {
-        commentDiv.style.display = "initial";
-        hehe = 1;
-      } else {
-        commentDiv.style.display = "none";
-        hehe = 0;
-      }
+      commentDiv.classList.toggle("hidden");
     });
   });
 
-  const commentForm = document.querySelector("#commentForm");
-
-  const submitCommentHandler = async (event) => {
-    const formData = new FormData(commentForm);
-    const formDataObject = Object.fromEntries(formData.entries());
+  const submitCommentHandler = async (event, form) => {
+    event.preventDefault();
+    const postId = form.getAttribute("data-postid");
+    const formData = new FormData(form);
+    const commentText = formData.get("text");
 
     try {
-      const user = `<%= user %>`;
-
-      const response = await axios.post(
-        `/feed/${pid}/comments`,
-        formDataObject
-      );
+      const response = await axios.post(`/feed/${postId}/comments`, {
+        text: commentText,
+      });
       const data = response.data;
-
-      const mergedObject = {
-        ...formDataObject,
-        author: data.author,
-      };
-
-      console.log(mergedObject);
 
       const commentHtml = `
       <div class="mb-2">
-        <p class="text-sm"><strong>${data.author.username}:</strong> ${data.text}</p>
+        <p class="text-sm"><strong>${data.author.username}</strong> ${data.text}</p>
       </div>
     `;
-      document.querySelector(".cmtdv").innerHTML += commentHtml;
+      document
+        .querySelector(`.cmtdv_${postId}`)
+        .insertAdjacentHTML("beforeend", commentHtml);
+
+      // Clear textarea
+      form.querySelector(".textarea").value = "";
+
+      // Hide the form after submission
+      form.parentElement.classList.add("hidden");
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Failed to post comment:", error);
     }
   };
 
-  document.addEventListener("DOMContentLoaded", async function () {
-    const commentForm = document.querySelector("#commentForm");
-    const commentIcon = document.getElementById("commentIcon");
-
-    const submitComment = document.getElementById("submitComment");
-    if (submitComment) {
-      submitComment.addEventListener("click", async function (event) {
-        event.preventDefault();
-        await submitCommentHandler(event);
-        // document.querySelector("#textarea").value = ""
-        commentForm.style.display = "none";
-        hehe = 0;
-        console.log(hehe);
-      });
-    }
-  });
-
   document.querySelector(".parent").addEventListener("click", function (dets) {
     if (dets.target.classList.contains("postimg")) {
-      var post = dets.target.parentNode.parentNode;
-      var heart = post.querySelector(".heart");
+      const post = dets.target.closest(".post");
+      const heart = post.querySelector(".heart");
+      const postId = dets.target.dataset.postid;
+
       if (heart.classList.contains("ri-heart-3-line")) {
-        heart.classList.remove("ri-heart-3-line");
-        heart.classList.add("ri-heart-3-fill");
+        heart.classList.replace("ri-heart-3-line", "ri-heart-3-fill");
         heart.classList.add("text-red-500");
       } else {
-        heart.classList.remove("ri-heart-3-fill");
+        heart.classList.replace("ri-heart-3-fill", "ri-heart-3-line");
         heart.classList.remove("text-red-500");
-        heart.classList.add("ri-heart-3-line");
       }
-      fetch(`/like/${dets.target.dataset.postid}`)
-        .then((raw) => raw.json())
-        .then((response) => {
-          console.log(response.likes.length);
-          post.querySelector(".likeval").textContent =
-            response.likes.length + " likes";
+
+      fetch(`/like/${postId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          post.querySelector(
+            ".likeval"
+          ).textContent = `${data.likes.length} likes`;
         });
-      var icon = document.createElement("i");
-      icon.classList.add("ri-heart-3-fill");
-      icon.classList.add(
-        "text-red-500",
-        "text-7xl",
-        "absolute",
-        "top-1/2",
-        "left-1/2",
-        "-translate-x-[50%]",
-        "z-[9]",
-        "-translate-y-[50%]"
-      );
+
+      const icon = document.createElement("i");
+      icon.className =
+        "ri-heart-3-fill text-red-500 text-7xl absolute top-1/2 left-1/2 -translate-x-[50%] z-[9] -translate-y-[50%]";
       dets.target.parentNode.appendChild(icon);
-      gsap.from(icon, {
-        scale: 0.5,
-        opacity: 0,
-        duration: 0.4,
-        y: 20,
-      });
+
+      gsap.from(icon, { scale: 0.5, opacity: 0, duration: 0.4, y: 20 });
       gsap.to(icon, {
         scale: 0,
         y: -50,
         opacity: 0,
         delay: 0.4,
         duration: 0.5,
-        onComplete: function () {
-          dets.target.parentNode.removeChild(icon);
-        },
+        onComplete: () => icon.remove(),
       });
     } else if (dets.target.classList.contains("save")) {
-      var id = dets.target.dataset.postid;
+      const id = dets.target.dataset.postid;
       fetch(`/save/${id}`)
-        .then((raw) => raw.json())
-        .then((result) => {
-          if (dets.target.classList.contains("ri-bookmark-line")) {
-            dets.target.classList.remove("ri-bookmark-line");
-            dets.target.classList.add("ri-bookmark-fill");
-          } else {
-            dets.target.classList.remove("ri-bookmark-fill");
-            dets.target.classList.add("ri-bookmark-line");
-          }
+        .then((res) => res.json())
+        .then(() => {
+          dets.target.classList.toggle("ri-bookmark-line");
+          dets.target.classList.toggle("ri-bookmark-fill");
         });
     }
   });
