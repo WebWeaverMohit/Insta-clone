@@ -14,8 +14,8 @@
     >
       <img
         class="h-full w-full object-cover object-center"
-        src="/images/uploads/<%= userprofile.picture %>"
-        alt=""
+        src="<%= userprofile.picture.startsWith('http') ? userprofile.picture : '/images/uploads/' + userprofile.picture %>"
+        alt="profile"
       />
     </div>
     <div class="stats -mr-3 flex gap-5 items-center justify-between">
@@ -66,8 +66,8 @@
     <div class="post w-[32.5%] h-32 bg-zinc-700 overflow-hidden rounded-md">
       <img
         class="h-full w-full object-center object-cover"
-        src="/images/uploads/<%= post.picture %>"
-        alt=""
+        src="<%= post.picture.startsWith('http') ? post.picture : '/images/uploads/' + post.picture %>"
+        alt="post"
       />
     </div>
     <% }) %> <% } else { %>
@@ -79,10 +79,12 @@
 </div>
 <% include ./partials/footer.ejs %>
 
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link
+  href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
+  rel="stylesheet"
+/>
 <style>
   .font-dm {
-    font-family: 'DM Sans', sans-serif;
+    font-family: "DM Sans", sans-serif;
   }
 </style>
-

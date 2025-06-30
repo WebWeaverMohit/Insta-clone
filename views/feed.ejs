@@ -1,5 +1,7 @@
 <% include ./partials/header.ejs %>
+
 <div class="w-full min-h-screen bg-[#0F0F0F] text-white py-5 font-dm">
+  <!-- Navbar -->
   <div class="w-full px-4 flex items-center justify-between">
     <h1 class="text-2xl text-[#7F5AF0] font-bold">SOCIAL SPHERE</h1>
     <div class="icons flex gap-5 items-center">
@@ -8,141 +10,99 @@
     </div>
   </div>
 
+  <!-- Stories -->
   <div class="story px-3 flex gap-3 overflow-auto mt-5">
     <a href="user/story/<%= stories.id %>">
       <div class="circle flex-shrink-0">
-        <div
-          class="gradient w-[18vw] h-[18vw] rounded-full bg-gradient-to-r from-[#7F5AF0] to-orange-500 flex items-center justify-center"
-        >
+        <div class="gradient w-[18vw] h-[18vw] rounded-full bg-gradient-to-r from-[#7F5AF0] to-orange-500 flex items-center justify-center">
           <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-            <img
-              class="w-full h-full object-cover"
-              src="<%= user.picture.startsWith('http') ? user.picture : '/images/uploads/' + user.picture %>"
-              alt="profile"
-            />
+            <img class="w-full h-full object-cover" src="<%= user.picture.startsWith('http') ? user.picture : '/images/uploads/' + user.picture %>" alt="profile" />
           </div>
         </div>
         <h3 class="text-center mt-1 text-sm"><%= user.username %></h3>
       </div>
     </a>
 
-    <% stories.forEach(function(story){ if
-    (user.followings.includes(story.user._id)) { %>
-    <a href="/otheruser/story/<%= story.id %>">
-      <div class="circle flex-shrink-0">
-        <div
-          class="gradient w-[18vw] h-[18vw] rounded-full bg-gradient-to-r from-[#7F5AF0] to-orange-500 flex items-center justify-center"
-        >
-          <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-            <img
-              class="w-full h-full object-cover"
-              src="/images/uploads/<%= story.user.picture %>"
-              alt=""
-            />
+    <% stories.forEach(function(story){ if (user.followings.includes(story.user._id)) { %>
+      <a href="/otheruser/story/<%= story.id %>">
+        <div class="circle flex-shrink-0">
+          <div class="gradient w-[18vw] h-[18vw] rounded-full bg-gradient-to-r from-[#7F5AF0] to-orange-500 flex items-center justify-center">
+            <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+              <img class="w-full h-full object-cover" src="<%= story.user.picture.startsWith('http') ? story.user.picture : '/images/uploads/' + story.user.picture %>" alt="" />
+            </div>
           </div>
+          <h3 class="text-center mt-1 text-sm"><%= story.user.username %></h3>
         </div>
-        <h3 class="text-center mt-1 text-sm"><%= story.user.username %></h3>
-      </div>
-    </a>
+      </a>
     <% } }); %>
   </div>
 
+  <!-- Posts Feed -->
   <div class="posts parent mb-20">
     <% posts.reverse().forEach(function(post){ %>
-    <div class="post mt-5 w-full min-h-[50vh]">
-      <div class="title px-4 flex items-center gap-2">
-        <div class="w-[8vw] h-[8vw] bg-[#1A1A1A] rounded-full overflow-hidden">
-          <img
-            class="h-full w-full object-cover"
-            src="<%= post.user.picture.startsWith('http') ? post.user.picture : '/images/uploads/' + post.user.picture %>"
-            alt="profile"
-          />
+      <div class="post mt-5 w-full min-h-[50vh]">
+        <div class="title px-4 flex items-center gap-2">
+          <div class="w-[8vw] h-[8vw] bg-[#1A1A1A] rounded-full overflow-hidden">
+            <img class="h-full w-full object-cover" src="<%= post.user.picture.startsWith('http') ? post.user.picture : '/images/uploads/' + post.user.picture %>" alt="profile" />
+          </div>
+          <h4 class="text-sm"><%= post.user.username %></h4>
+          <h6 class="text-xs opacity-30"><%= dater(new Date(post.date)) %></h6>
         </div>
-        <h4 class="text-sm"><%= post.user.username %></h4>
-        <h6 class="text-xs opacity-30"><%= dater(new Date(post.date)) %></h6>
-      </div>
 
-      <% const imageSrc = post.picture.startsWith('http') ? post.picture :
-      '/images/uploads/' + post.picture; %>
-      <div class="relative w-full h-96 mt-4 bg-[#1A1A1A]">
-        <img
-          data-postid="<%= post.id %>"
-          class="postimg h-full w-full object-cover"
-          src="<%= imageSrc %>"
-          alt=""
-        />
-      </div>
+        <div class="relative w-full h-96 mt-4 bg-[#1A1A1A]">
+          <img data-postid="<%= post._id %>" class="postimg h-full w-full object-cover" src="<%= post.picture.startsWith('http') ? post.picture : '/images/uploads/' + post.picture %>" alt="" />
+        </div>
 
-      <div
-        class="options w-full px-4 flex justify-between items-center text-[1.4rem]"
-      >
-        <div class="flex gap-3 mt-2">
-          <% if(post.likes.indexOf(user._id)===-1){ %>
-          <i class="heart ri-heart-3-line"></i>
+        <div class="options w-full px-4 flex justify-between items-center text-[1.4rem]">
+          <div class="flex gap-3 mt-2">
+            <% if(post.likes.indexOf(user._id) === -1){ %>
+              <i class="heart ri-heart-3-line"></i>
+            <% } else { %>
+              <i class="heart ri-heart-3-fill text-red-500"></i>
+            <% } %>
+            <i data-id="<%= post._id %>" class="commentIcon ri-chat-3-line" onclick="openCommentPanel('<%= post._id %>')"></i>
+            <i class="ri-share-circle-line"></i>
+          </div>
+          <% if(user.saved.indexOf(post._id) === -1){ %>
+            <i data-postid="<%= post._id %>" class="save ri-bookmark-line"></i>
           <% } else { %>
-          <i class="heart ri-heart-3-fill text-red-500"></i>
+            <i data-postid="<%= post._id %>" class="save ri-bookmark-fill"></i>
           <% } %>
-          <i data-id="<%= post._id %>" class="commentIcon ri-chat-3-line"></i>
-          <i class="ri-share-circle-line"></i>
         </div>
-        <% if(user.saved.indexOf(post._id)===-1){ %>
-        <i data-postid="<%= post._id %>" class="save ri-bookmark-line"></i>
-        <% } else { %>
-        <i data-postid="<%= post._id %>" class="save ri-bookmark-fill"></i>
-        <% } %>
-      </div>
 
-      <h3 class="likeval px-4 mt-2 text-sm tracking-tight">
-        <%= post.likes.length %> likes
-      </h3>
-      <h2 class="text-sm font-light mt-2 px-4">
-        <span class="font-semibold"><%= post.user.username %></span> <%=
-        post.caption %>
-      </h2>
+        <h3 class="likeval px-4 mt-2 text-sm tracking-tight">
+          <%= post.likes.length %> likes
+        </h3>
+        <h2 class="text-sm font-light mt-2 px-4">
+          <span class="font-semibold"><%= post.user.username %></span> <%= post.caption %>
+        </h2>
 
-      <div class="w-full py-2">
-        <% post.comments.forEach(comment => { %>
-        <div class="cmtdv_<%= post._id %> mb-2">
-          <p class="text-sm">
-            <strong><%= comment.username %></strong> <%= comment.text %>
-          </p>
-        </div>
-        <% }) %>
-      </div>
+        <!-- Comment Panel -->
+        <div id="commentPanel_<%= post._id %>" class="fixed bottom-0 left-0 w-full h-1/2 bg-[#1A1A1A] z-50 rounded-t-xl translate-y-full transition-transform duration-300 ease-in-out overflow-hidden flex flex-col">
+          <div class="flex justify-between items-center px-4 py-2 border-b border-[#333]">
+            <h4 class="text-white text-sm">Comments</h4>
+            <button onclick="closeCommentPanel('<%= post._id %>')" class="text-white text-lg">&times;</button>
+          </div>
 
-      <div class="commentContainer">
-        <div id="commentdiv_<%= post._id %>" class="hidden">
-          <form
-            class="commentForm"
-            data-postid="<%= post._id %>"
-            onsubmit="submitCommentHandler(event, this)"
-            method="POST"
-          >
-            <div class="flex items-center gap-2 w-full">
-              <textarea
-                class="textarea flex-1 bg-[#292929] text-white rounded-md px-4 py-2 h-12 resize-none outline-none focus:ring-2 focus:ring-[#7F5AF0]"
-                name="text"
-                placeholder="Add a comment..."
-              ></textarea>
-              <button
-                type="submit"
-                class="h-12 px-5 bg-[#7F5AF0] hover:bg-[#6d48e7] text-white rounded-md transition duration-200"
-              >
-                Submit
-              </button>
-            </div>
+          <div class="flex-1 overflow-y-auto px-4 py-3 space-y-2 cmtdv_<%= post._id %>">
+            <% post.comments.forEach(comment => { %>
+              <div class="text-sm text-white">
+                <strong><%= comment.username %></strong> <%= comment.text %>
+              </div>
+            <% }) %>
+          </div>
+
+          <form class="px-4 py-3 border-t border-[#333] flex items-center gap-2" data-postid="<%= post._id %>" onsubmit="submitCommentHandler(event, this)" method="POST">
+            <textarea name="text" placeholder="Add a comment..." class="textarea flex-1 bg-[#292929] text-white rounded-md px-3 py-2 h-10 resize-none outline-none text-sm"></textarea>
+            <button type="submit" class="px-4 h-10 bg-[#7F5AF0] hover:bg-[#6d48e7] text-white rounded-md text-sm">Send</button>
           </form>
         </div>
       </div>
-    </div>
     <% }) %>
   </div>
 </div>
 
-<link
-  href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
-  rel="stylesheet"
-/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
 <style>
   .font-dm {
     font-family: "DM Sans", sans-serif;
@@ -151,46 +111,38 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js"></script>
-<script>
-  document.querySelectorAll(".commentIcon").forEach((icon) => {
-    icon.addEventListener("click", () => {
-      const postId = icon.getAttribute("data-id");
-      const commentDiv = document.querySelector(`#commentdiv_${postId}`);
-      commentDiv.classList.toggle("hidden");
-    });
-  });
 
-  const submitCommentHandler = async (event, form) => {
+<script>
+  function openCommentPanel(postId) {
+    document.getElementById(`commentPanel_${postId}`).classList.remove("translate-y-full");
+  }
+
+  function closeCommentPanel(postId) {
+    document.getElementById(`commentPanel_${postId}`).classList.add("translate-y-full");
+  }
+
+  async function submitCommentHandler(event, form) {
     event.preventDefault();
     const postId = form.getAttribute("data-postid");
-    const formData = new FormData(form);
-    const commentText = formData.get("text");
+    const commentText = form.querySelector("textarea").value;
 
     try {
-      const response = await axios.post(`/feed/${postId}/comments`, {
-        text: commentText,
-      });
+      const response = await axios.post(`/feed/${postId}/comments`, { text: commentText });
       const data = response.data;
 
       const commentHtml = `
-      <div class="mb-2">
-        <p class="text-sm"><strong>${data.author.username}</strong> ${data.text}</p>
-      </div>
-    `;
-      document
-        .querySelector(`.cmtdv_${postId}`)
-        .insertAdjacentHTML("beforeend", commentHtml);
-
-      // Clear textarea
-      form.querySelector(".textarea").value = "";
-
-      // Hide the form after submission
-      form.parentElement.classList.add("hidden");
-    } catch (error) {
-      console.error("Failed to post comment:", error);
+        <div class="text-sm text-white">
+          <strong>${data.author.username}</strong> ${data.text}
+        </div>
+      `;
+      document.querySelector(`.cmtdv_${postId}`).insertAdjacentHTML("beforeend", commentHtml);
+      form.querySelector("textarea").value = "";
+    } catch (err) {
+      console.error("Failed to submit comment", err);
     }
-  };
+  }
 
+  // Like & Save
   document.querySelector(".parent").addEventListener("click", function (dets) {
     if (dets.target.classList.contains("postimg")) {
       const post = dets.target.closest(".post");
@@ -206,16 +158,13 @@
       }
 
       fetch(`/like/${postId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          post.querySelector(
-            ".likeval"
-          ).textContent = `${data.likes.length} likes`;
+        .then(res => res.json())
+        .then(data => {
+          post.querySelector(".likeval").textContent = `${data.likes.length} likes`;
         });
 
       const icon = document.createElement("i");
-      icon.className =
-        "ri-heart-3-fill text-red-500 text-7xl absolute top-1/2 left-1/2 -translate-x-[50%] z-[9] -translate-y-[50%]";
+      icon.className = "ri-heart-3-fill text-red-500 text-7xl absolute top-1/2 left-1/2 -translate-x-[50%] z-[9] -translate-y-[50%]";
       dets.target.parentNode.appendChild(icon);
 
       gsap.from(icon, { scale: 0.5, opacity: 0, duration: 0.4, y: 20 });
@@ -227,10 +176,12 @@
         duration: 0.5,
         onComplete: () => icon.remove(),
       });
-    } else if (dets.target.classList.contains("save")) {
+    }
+
+    if (dets.target.classList.contains("save")) {
       const id = dets.target.dataset.postid;
       fetch(`/save/${id}`)
-        .then((res) => res.json())
+        .then(res => res.json())
         .then(() => {
           dets.target.classList.toggle("ri-bookmark-line");
           dets.target.classList.toggle("ri-bookmark-fill");
@@ -238,4 +189,5 @@
     }
   });
 </script>
+
 <% include ./partials/footer.ejs %>

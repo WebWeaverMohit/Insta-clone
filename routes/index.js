@@ -110,7 +110,7 @@ router.get("/feed", isLoggedIn, async (req, res) => {
       posts,
       stories: filtered,
       dater: utils.formatRelativeTime,
-      pid: posts._id,
+      postId: posts._id,
     });
   } catch (error) {
     console.error(error);

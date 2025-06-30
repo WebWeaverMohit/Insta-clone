@@ -1,52 +1,71 @@
 <% include ./partials/header.ejs %>
+
 <div class="w-full min-h-screen bg-[#0F0F0F] px-4 py-5 font-orbitron">
+  <!-- Search Bar -->
   <div
     class="border border-[#292929] flex items-center justify-between px-3 py-2 rounded-md bg-[#1A1A1A]"
   >
     <i class="text-[#7F5AF0] ri-search-line text-lg"></i>
     <input
-      class="ml-2 w-full bg-transparent outline-none text-[#CCCCCC] placeholder-[#555] text-sm"
+      class="input ml-2 w-full bg-transparent outline-none text-[#CCCCCC] placeholder-[#555] text-sm"
       type="text"
       placeholder="Search username"
     />
   </div>
+
+  <!-- Searched users will be populated here -->
   <div class="users mt-6">
-    <!-- Searched users will be populated here -->
+    <!-- Results appear here -->
   </div>
 </div>
 
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link
+  href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
+  rel="stylesheet"
+/>
 <style>
   .font-dm {
-    font-family: 'DM Sans', sans-serif;
+    font-family: "DM Sans", sans-serif;
   }
 </style>
 
-
 <script>
-  var inp = document.querySelector(".input");
-  inp.addEventListener("input", function (e) {
-    if (inp.value !== "") {
-      fetch(`/search/${inp.value}`)
-        .then((raw) => raw.json())
-        .then((result) => {
+  const inp = document.querySelector(".input");
+
+  inp.addEventListener("input", function () {
+    const value = inp.value.trim();
+
+    if (value !== "") {
+      fetch(`/search/${value}`)
+        .then((res) => res.json())
+        .then((users) => {
           let clutter = "";
-          result.forEach(function (item) {
-            clutter += `<a href="/profile/${item.username}" class="outline-none">
-            <div class="text-white flex items-center gap-2 mt-5">
-                <div class="image w-[11vw] h-[11vw] relative rounded-full bg-sky-100 overflow-hidden">
-                    <img class="object-cover h-full w-full absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%] object-center" src="/images/uploads/${item.picture}" alt="">
+          users.forEach((user) => {
+            const picture = user.picture.startsWith("http")
+              ? user.picture
+              : `/images/uploads/${user.picture}`;
+
+            clutter += `
+              <a href="/profile/${user.username}" class="outline-none">
+                <div class="text-white flex items-center gap-3 mt-5 transition hover:bg-[#1A1A1A] px-3 py-2 rounded-md">
+                  <div class="image w-14 h-14 relative rounded-full overflow-hidden bg-[#292929]">
+                    <img class="object-cover h-full w-full absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%]" src="${picture}" alt="${user.username}" />
+                  </div>
+                  <div class="text">
+                    <h3 class="font-medium">${user.username}</h3>
+                    <h4 class="text-xs opacity-50">${user.name}</h4>
+                  </div>
                 </div>
-                <div class="text">
-                    <h3>${item.username}</h3>
-                    <h4 class="text-xs opacity-30 leading-none">${item.name}</h4>
-                </div>
-            </div>            
-        </a>`;
+              </a>
+            `;
           });
           document.querySelector(".users").innerHTML = clutter;
         });
+    } else {
+      // Clear results when input is empty
+      document.querySelector(".users").innerHTML = "";
     }
   });
 </script>
+
 <% include ./partials/footer.ejs %>
